@@ -8,25 +8,53 @@ body {
     height: 100%;
 }
 
-.boardRow {
+.boardRow, .playerInfoBoard {
     display: flex;
 }
 
-.board, .boardSquare {
+.board, .boardSquare, .playerInfoBoard, .playerMessage, .playerIcon {
     box-sizing: border-box;
     border: 1px solid black;
-
 }
+
+.board, .playerInfoBoard {
+    margin: 4% auto;
+}
+
 .board {
     width: 600px;
     height: 600px;
-    margin: 8% auto;
+}
+
+
+.playerInfoBoard {
+    width: 600px;
+    height: 100px;
+}
+
+.boardSquare, .playerMessage, .playerIcon {
+    text-align: center;
 }
 
 .boardSquare {
     width: 200px;
     height: 200px;
-    text-align: center;
     line-height: 200px;
     font-size: 600%;
+}
+
+.playerMessage, .playerIcon {
+    height: 100%;
+    display: inline-block;
+    border-collapse: collapse;
+    line-height: 100px;
+    font-size: 450%;
+}
+
+.playerMessage {
+    width: 400px;
+}
+
+.playerIcon {
+    width: 100px;
 }

@@ -15,11 +15,15 @@ const possibleWinIndices = [
 
 function App() {
   const [gameState, setGameState] = React.useState(
-    Array(9).fill(null)
+  Array(9).fill(null)
   )
   const [gameOver, setGameOver] = React.useState(false);
   const [currentMoveValue, setCurrentMoveValue] = React.useState('O');
   
+  React.useEffect(() =>
+    checkWin()
+  , [gameState]);
+
   const checkWin = () => {
     possibleWinIndices.map((winIndices) => {
       if (gameState[winIndices[0]] === 
@@ -44,13 +48,12 @@ function App() {
         return element;
       }))
     }};
-    
-    React.useEffect(() =>
-      checkWin()
-    , [gameState]);
 
   return (
-    <Board gameState={gameState} onMakeMove={onMakeMove}/>
+    <>
+      <PlayerInfoBoard />
+      <Board gameState={gameState} onMakeMove={onMakeMove}/>
+    </>
   )
 };
 
@@ -98,5 +101,17 @@ const BoardSquare = ({boardSquareIndex, boardSquareValue, makeMove}) => (
           {boardSquareValue}
   </div>
 );
+
+const PlayerInfoBoard = () => (
+  <div className='playerInfoBoard'>
+    <PlayerIcon playerIcon={'X'}/>
+    <p className='playerMessage'></p>
+    <PlayerIcon playerIcon={'O'}/>
+  </div>
+)
+
+const PlayerIcon = ({playerIcon}) => (
+  <span className='playerIcon'>{playerIcon}</span>
+)
 
 export default App;
