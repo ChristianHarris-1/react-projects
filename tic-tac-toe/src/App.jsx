@@ -36,18 +36,19 @@ function App() {
   };
   
   const onMakeMove = (boardSquareIndex) => {
-    setGameState(gameState.map((element, index) => {
-      if (boardSquareIndex === index) {
-        return currentMoveValue;
-      }
-      return element;
-    }))
-  };
-
-  React.useEffect(() =>
-    checkWin()
-  , [gameState]);
+    if (gameState[boardSquareIndex] == null) {
+      setGameState(gameState.map((element, index) => {
+        if (boardSquareIndex === index) {
+          return currentMoveValue;
+        }
+        return element;
+      }))
+    }};
     
+    React.useEffect(() =>
+      checkWin()
+    , [gameState]);
+
   return (
     <Board gameState={gameState} onMakeMove={onMakeMove}/>
   )
