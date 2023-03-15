@@ -12,10 +12,9 @@ const possibleWinIndices = [
   [2,4,6]
 ];
 
-
 function App() {
   const [gameState, setGameState] = React.useState(
-  Array(9).fill(null)
+    Array(9).fill(null)
   )
   const [gameOver, setGameOver] = React.useState(false);
   const [currentMoveValue, setCurrentMoveValue] = React.useState('O');
@@ -27,7 +26,11 @@ function App() {
 
   React.useEffect(() =>
     updateMessage()
-  , [gameOver])
+  , [gameOver]);
+
+  React.useEffect(() =>
+    updateCurrentMoveValue()
+  , [gameState, gameOver]);
 
   const checkWin = () => {
     possibleWinIndices.map((winIndices) => {
@@ -39,9 +42,6 @@ function App() {
         setGameOver(true);
       }
     })
-    if (!gameOver) {
-      setCurrentMoveValue((currentMoveValue === 'X') ? 'O' : 'X');
-    }
   };
   
   const onMakeMove = (boardSquareIndex) => {
@@ -52,7 +52,8 @@ function App() {
         }
         return element;
       }))
-    }};
+    }
+  };
 
   const updateMessage = () => {
     if (gameOver) {
@@ -60,9 +61,13 @@ function App() {
     }
   }
 
+  const updateCurrentMoveValue = () => {
+    setCurrentMoveValue((currentMoveValue === 'X') ? 'O' : 'X');
+  }
+
   return (
     <>
-      <PlayerInfoBoard currentPlayerMessage={currentPlayerMessage}/>
+      <PlayerInfoBoard currentPlayerMessage={currentPlayerMessage} currentPlayer={currentMoveValue}/>
       <Board gameState={gameState} onMakeMove={onMakeMove}/>
     </>
   )
@@ -113,16 +118,22 @@ const BoardSquare = ({boardSquareIndex, boardSquareValue, makeMove}) => (
   </div>
 );
 
-const PlayerInfoBoard = ({currentPlayerMessage}) => (
+const PlayerInfoBoard = ({currentPlayerMessage, currentPlayer}) => (
   <div className='playerInfoBoard'>
-    <PlayerIcon playerIcon={'X'}/>
+    <PlayerIcon playerIcon={'X'} currentPlayer={currentPlayer}/>
     <p className='playerMessage'>{currentPlayerMessage}</p>
-    <PlayerIcon playerIcon={'O'}/>
+    <PlayerIcon playerIcon={'O'} currentPlayer={currentPlayer}/>
   </div>
 )
 
-const PlayerIcon = ({playerIcon}) => (
-  <span className='playerIcon'>{playerIcon}</span>
-)
+const PlayerIcon = ({playerIcon, currentPlayer}) => {
+  return (
+    (currentPlayer === playerIcon)
+      ?
+      <span className='playerIcon currentPlayer'>{playerIcon}</span>
+      :
+      <span className='playerIcon'>{playerIcon}</span>
+  )
+}
 
 export default App;

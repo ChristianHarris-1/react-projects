@@ -58,3 +58,7 @@ body {
 .playerIcon {
     width: 100px;
 }
+
+.currentPlayer {
+    background-color: orange;
+}
