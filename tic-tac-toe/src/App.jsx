@@ -19,10 +19,15 @@ function App() {
   )
   const [gameOver, setGameOver] = React.useState(false);
   const [currentMoveValue, setCurrentMoveValue] = React.useState('O');
+  const [currentPlayerMessage, setCurrentPlayerMessage] = React.useState('Next Move')
   
   React.useEffect(() =>
     checkWin()
   , [gameState]);
+
+  React.useEffect(() =>
+    updateMessage()
+  , [gameOver])
 
   const checkWin = () => {
     possibleWinIndices.map((winIndices) => {
@@ -49,9 +54,15 @@ function App() {
       }))
     }};
 
+  const updateMessage = () => {
+    if (gameOver) {
+      setCurrentPlayerMessage('Winner!')
+    }
+  }
+
   return (
     <>
-      <PlayerInfoBoard />
+      <PlayerInfoBoard currentPlayerMessage={currentPlayerMessage}/>
       <Board gameState={gameState} onMakeMove={onMakeMove}/>
     </>
   )
@@ -102,10 +113,10 @@ const BoardSquare = ({boardSquareIndex, boardSquareValue, makeMove}) => (
   </div>
 );
 
-const PlayerInfoBoard = () => (
+const PlayerInfoBoard = ({currentPlayerMessage}) => (
   <div className='playerInfoBoard'>
     <PlayerIcon playerIcon={'X'}/>
-    <p className='playerMessage'></p>
+    <p className='playerMessage'>{currentPlayerMessage}</p>
     <PlayerIcon playerIcon={'O'}/>
   </div>
 )
