@@ -18,7 +18,7 @@ function App() {
   )
   const [gameOver, setGameOver] = React.useState(false);
   const [currentMoveValue, setCurrentMoveValue] = React.useState('O');
-  const [currentPlayerMessage, setCurrentPlayerMessage] = React.useState('Next Move')
+  const [currentPlayerMessage, setCurrentPlayerMessage] = React.useState('next move')
   
   React.useEffect(() =>
     checkWin()
@@ -67,6 +67,7 @@ function App() {
 
   return (
     <>
+      <h1>Tic Tac Toe</h1>
       <PlayerInfoBoard currentPlayerMessage={currentPlayerMessage} currentPlayer={currentMoveValue}/>
       <Board gameState={gameState} onMakeMove={onMakeMove}/>
     </>
