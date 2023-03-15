@@ -45,7 +45,7 @@ function App() {
   };
   
   const onMakeMove = (boardSquareIndex) => {
-    if (gameState[boardSquareIndex] == null) {
+    if (gameState[boardSquareIndex] == null && !gameOver) {
       setGameState(gameState.map((element, index) => {
         if (boardSquareIndex === index) {
           return currentMoveValue;
