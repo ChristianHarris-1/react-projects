@@ -18,7 +18,7 @@ function App() {
   )
   const [gameOver, setGameOver] = React.useState(false);
   const [currentMoveValue, setCurrentMoveValue] = React.useState('O');
-  const [currentPlayerMessage, setCurrentPlayerMessage] = React.useState('next move')
+  const [currentPlayerMessage, setCurrentPlayerMessage] = React.useState('next player')
   
   React.useEffect(() =>
     checkWin()
