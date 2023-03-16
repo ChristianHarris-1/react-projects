@@ -17,7 +17,6 @@ function App() {
     Array(9).fill(null)
   )
   const [gameOver, setGameOver] = React.useState(false);
-  const [currentMoveValue, setCurrentMoveValue] = React.useState('O');
   const [currentPlayerMessage, setCurrentPlayerMessage] = React.useState('next player')
   
   React.useEffect(() =>
@@ -27,10 +26,6 @@ function App() {
   React.useEffect(() =>
     updateMessage()
   , [gameOver]);
-
-  React.useEffect(() =>
-    updateCurrentMoveValue()
-  , [gameState, gameOver]);
 
   const checkWin = () => {
     possibleWinIndices.map((winIndices) => {
@@ -48,7 +43,7 @@ function App() {
     if (gameState[boardSquareIndex] == null && !gameOver) {
       setGameState(gameState.map((element, index) => {
         if (boardSquareIndex === index) {
-          return currentMoveValue;
+          return getCurrentPlayerValue(gameState);
         }
         return element;
       }))
@@ -61,14 +56,10 @@ function App() {
     }
   }
 
-  const updateCurrentMoveValue = () => {
-    setCurrentMoveValue((currentMoveValue === 'X') ? 'O' : 'X');
-  }
-
   return (
     <>
       <h1>Tic Tac Toe</h1>
-      <PlayerInfoBoard currentPlayerMessage={currentPlayerMessage} currentPlayer={currentMoveValue}/>
+      <PlayerInfoBoard gameState={gameState} currentPlayerMessage={currentPlayerMessage}/>
       <Board gameState={gameState} handleMakeMove={handleMakeMove}/>
     </>
   )
@@ -110,13 +101,16 @@ const BoardSquare = ({boardSquareValue, onMakeMove}) => (
   </div>
 );
 
-const PlayerInfoBoard = ({currentPlayerMessage, currentPlayer}) => (
-  <div className='playerInfoBoard'>
-    <PlayerIcon playerIcon={'X'} currentPlayer={currentPlayer}/>
-    <p className='playerMessage'>{currentPlayerMessage}</p>
-    <PlayerIcon playerIcon={'O'} currentPlayer={currentPlayer}/>
-  </div>
-)
+const PlayerInfoBoard = ({gameState, currentPlayerMessage}) => {
+  const currentPlayer = getCurrentPlayerValue(gameState);
+  return (
+    <div className='playerInfoBoard'>
+      <PlayerIcon playerIcon={'X'} currentPlayer={currentPlayer}/>
+      <p className='playerMessage'>{currentPlayerMessage}</p>
+      <PlayerIcon playerIcon={'O'} currentPlayer={currentPlayer}/>
+    </div>
+  )
+}
 
 const PlayerIcon = ({playerIcon, currentPlayer}) => {
   return (
@@ -129,3 +123,8 @@ const PlayerIcon = ({playerIcon, currentPlayer}) => {
 }
 
 export default App;
+
+const getCurrentPlayerValue = (gameState) => {
+  const moveCount = 9 - gameState.filter((boardSquareValue) => boardSquareValue === null).length;
+  return (moveCount % 2) ? 'O' : 'X';
+}
