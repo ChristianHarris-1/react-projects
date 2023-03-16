@@ -44,7 +44,7 @@ function App() {
     })
   };
   
-  const onMakeMove = (boardSquareIndex) => {
+  const handleMakeMove = (boardSquareIndex) => {
     if (gameState[boardSquareIndex] == null && !gameOver) {
       setGameState(gameState.map((element, index) => {
         if (boardSquareIndex === index) {
@@ -69,52 +69,52 @@ function App() {
     <>
       <h1>Tic Tac Toe</h1>
       <PlayerInfoBoard currentPlayerMessage={currentPlayerMessage} currentPlayer={currentMoveValue}/>
-      <Board gameState={gameState} onMakeMove={onMakeMove}/>
+      <Board gameState={gameState} handleMakeMove={handleMakeMove}/>
     </>
   )
 };
 
-const Board = ({gameState, onMakeMove}) => (
+const Board = ({gameState, handleMakeMove}) => (
   <div className='board'>
     <div className='boardRow'>
       <BoardSquare boardSquareIndex={0} 
                     boardSquareValue={gameState[0]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
       <BoardSquare boardSquareIndex={1}
                     boardSquareValue={gameState[1]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
       <BoardSquare boardSquareIndex={2}
                     boardSquareValue={gameState[2]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
     </div>
     <div className='boardRow'>
       <BoardSquare boardSquareIndex={3} 
                     boardSquareValue={gameState[3]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
       <BoardSquare boardSquareIndex={4}
                     boardSquareValue={gameState[4]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
       <BoardSquare boardSquareIndex={5}
                     boardSquareValue={gameState[5]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
     </div>
     <div className='boardRow'>
       <BoardSquare boardSquareIndex={6} 
                     boardSquareValue={gameState[6]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
       <BoardSquare boardSquareIndex={7}
                     boardSquareValue={gameState[7]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
       <BoardSquare boardSquareIndex={8}
                     boardSquareValue={gameState[8]}
-                    makeMove={onMakeMove}/>
+                    onMakeMove={handleMakeMove}/>
     </div>
   </div>
 );
 
-const BoardSquare = ({boardSquareIndex, boardSquareValue, makeMove}) => (
+const BoardSquare = ({boardSquareIndex, boardSquareValue, onMakeMove}) => (
   <div className='boardSquare'
-        onClick={() => makeMove(boardSquareIndex)}>
+        onClick={() => onMakeMove(boardSquareIndex)}>
           {boardSquareValue}
   </div>
 );
