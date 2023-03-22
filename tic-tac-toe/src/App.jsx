@@ -1,60 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
 
-const possibleWinIndices = [
-  [0,1,2],
-  [3,4,5],
-  [6,7,8],
-  [0,3,6],
-  [1,4,7],
-  [2,5,8],
-  [0,4,8],
-  [2,4,6]
-];
 
 function App() {
   const [boardSquareValues, setBoardSquareValues] = React.useState(
     Array(9).fill(null)
-  )
-  const [gameOver, setGameOver] = React.useState(false);
-  const [currentPlayerMessage, setCurrentPlayerMessage] = React.useState('next player')
-  
-  React.useEffect(() =>
-    checkWin()
-  , [boardSquareValues]);
-
-  React.useEffect(() =>
-    updateMessage()
-  , [gameOver]);
-
-  const checkWin = () => {
-    possibleWinIndices.map((winIndices) => {
-      if (boardSquareValues[winIndices[0]] === 
-          boardSquareValues[winIndices[1]] &&
-          boardSquareValues[winIndices[1]] ===
-          boardSquareValues[winIndices[2]] &&
-          boardSquareValues[winIndices[2]] != null) {
-        setGameOver(true);
-      }
-    })
-  };
+  );
   
   const handleMakeMove = (boardSquareIndex) => {
-    if (boardSquareValues[boardSquareIndex] == null && !gameOver) {
-      setBoardSquareValues(boardSquareValues.map((element, index) => {
-        if (boardSquareIndex === index) {
-          return getCurrentPlayerValue(boardSquareValues);
-        }
-        return element;
-      }))
+    if (boardSquareValues[boardSquareIndex] || checkForWin(boardSquareValues)) {
+      return;
     }
+    setBoardSquareValues(boardSquareValues.map((element, index) => {
+      if (boardSquareIndex === index) {
+        return getCurrentPlayerValue(boardSquareValues);
+      }
+      return element;
+    }))
   };
 
-  const updateMessage = () => {
-    if (gameOver) {
-      setCurrentPlayerMessage('Winner!')
-    }
-  }
+  const currentPlayerMessage = (checkForWin(boardSquareValues)) ? 'Winner!' : 'next player';
 
   return (
     <>
@@ -102,7 +67,9 @@ const BoardSquare = ({boardSquareValue, onMakeMove}) => (
 );
 
 const PlayerInfoBoard = ({boardSquareValues, currentPlayerMessage}) => {
-  const currentPlayer = getCurrentPlayerValue(boardSquareValues);
+  const currentPlayer = (currentPlayerMessage !== 'Winner!')
+    ? getCurrentPlayerValue(boardSquareValues)
+    : getPreviousPlayerValue(boardSquareValues)
   return (
     <div className='playerInfoBoard'>
       <PlayerIcon playerIcon={'X'} currentPlayer={currentPlayer}/>
@@ -112,19 +79,44 @@ const PlayerInfoBoard = ({boardSquareValues, currentPlayerMessage}) => {
   )
 }
 
-const PlayerIcon = ({playerIcon, currentPlayer}) => {
-  return (
-    (currentPlayer === playerIcon)
-      ?
-      <span className='playerIcon currentPlayer'>{playerIcon}</span>
-      :
-      <span className='playerIcon'>{playerIcon}</span>
-  )
-}
+const PlayerIcon = ({playerIcon, currentPlayer}) => (
+  (currentPlayer === playerIcon)
+    ?
+    <span className='playerIcon currentPlayer'>{playerIcon}</span>
+    :
+    <span className='playerIcon'>{playerIcon}</span>
+)
 
 export default App;
 
 const getCurrentPlayerValue = (boardSquareValues) => {
   const moveCount = 9 - boardSquareValues.filter((boardSquareValue) => boardSquareValue === null).length;
   return (moveCount % 2) ? 'O' : 'X';
+};
+
+const getPreviousPlayerValue = (boardSquareValues) => {
+  const moveCount = 9 - boardSquareValues.filter((boardSquareValue) => boardSquareValue === null).length;
+  return ((moveCount - 1) % 2) ? 'O' : 'X';
+}
+
+function checkForWin(boardSquareValues) {
+  const possibleWinIndices = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+  ];
+
+  for (const winIndices of possibleWinIndices) {
+    if (boardSquareValues[winIndices[0]] === boardSquareValues[winIndices[1]] && 
+        boardSquareValues[winIndices[1]] === boardSquareValues[winIndices[2]] && 
+        boardSquareValues[winIndices[0]]) {
+      return true;
+    }
+  }
+  return false;
 }
