@@ -19,7 +19,7 @@ function App() {
     }))
   };
 
-  const currentPlayerMessage = (checkForWin(boardSquareValues)) ? 'Winner!' : 'next player';
+  const currentPlayerMessage = (checkForWin(boardSquareValues)) ? 'Winner!' : 'Next Move';
 
   return (
     <>
