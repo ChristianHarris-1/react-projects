@@ -9,7 +9,7 @@ function App() {
       <ShoppingList/>   
     </>
   )
-}
+};
 
 const SearchBar = () => (
   <form className="search">
@@ -17,7 +17,7 @@ const SearchBar = () => (
     <input type="text" className="quantityInput" placeholder="How many?" default={1}/>
     <button type="submit" className="addButton">Add</button>
   </form>
-)
+);
 
 const ShoppingList = () => (
   <div className="shoppingList">
@@ -25,14 +25,14 @@ const ShoppingList = () => (
     <ListItem itemName="Item2" quantity="2"/>
     <ListItem itemName="Item3" quantity="3"/>
   </div>
-)
+);
 
 const ListItem = ({itemName, quantity}) => (
   <div className="listItem">
     <p className="itemName">{itemName}</p>
     <p className="itemQuantity">{quantity}</p>
     <button className="editButton">Edit</button>
-    <button className="exitButton">Exit</button>
+    <button className="removeButton">X</button>
   </div>
 );
 
