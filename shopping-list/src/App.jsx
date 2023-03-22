@@ -1,41 +1,55 @@
 import * as React from 'react';
 import './App.css'
 
-// {itemName:, itemQuantity:}
-
 function App() {
   const [shoppingList, setShoppingList] = React.useState([]);
   const [searchInput, setSearchInput] = React.useState("");
+  const [quantityInput, setQuantityInput] = React.useState("");
+
+  const handleAdd = (event, searchInput, quantityInput) => {
+    setShoppingList([...shoppingList, {itemName: searchInput, itemQuantity: quantityInput}]);
+    event.preventDefault();
+  }
+
+  const handleSearchInput = (event) => {
+    setSearchInput(event.target.value);
+  }
+
+  const handleQuantityInput = (event) => {
+    setQuantityInput(event.target.value);
+  }
 
   return (
     <>
       <h1 className="title">Shopping List</h1>
-      <SearchBar searchInput={searchInput}/>
+      <SearchBar searchInput={searchInput} quantityInput={quantityInput} onSearchInput={handleSearchInput} onQuantityInput={handleQuantityInput} onAddItem={handleAdd}/>
       <ShoppingList shoppingList={shoppingList}/>   
     </>
   )
 };
 
-const SearchBar = ({searchInput}) => (
-  <form className="search">
-    <input type="text" className="searchInput" placeholder="Search. . ." value={searchInput}/>
-    <input type="text" className="quantityInput" placeholder="How many?"/>
+const SearchBar = ({searchInput, quantityInput, onSearchInput, onQuantityInput, onAddItem}) => (
+  <form className="search" onSubmit={() => {
+    onAddItem(event, searchInput, quantityInput)}}
+  >
+    <input type="text" className="searchInput" placeholder="Search. . ." value={searchInput} onChange={onSearchInput}/>
+    <input type="text" className="quantityInput" placeholder="How many?" value={quantityInput} onChange={onQuantityInput}/>
     <button type="submit" className="addButton">Add</button>
   </form>
 );
 
 const ShoppingList = ({shoppingList}) => (
   <ul className="shoppingList">
-    {shoppingList.map((listItem) => {
-      <ListItem itemName={listItem.itemName} quantity={listItem.quantity}/>
-    })}
+    {shoppingList.map((listItem) => (
+      <ListItem itemName={listItem.itemName} itemQuantity={listItem.itemQuantity}/>  
+    ))}
   </ul>
 );
 
-const ListItem = ({itemName, quantity}) => (
+const ListItem = ({itemName, itemQuantity}) => (
   <li className="listItem">
     <p className="itemName">{itemName}</p>
-    <p className="itemQuantity">{quantity}</p>
+    <p className="itemQuantity">{itemQuantity}</p>
     <button className="editButton">Edit</button>
     <button className="removeButton">X</button>
   </li>
