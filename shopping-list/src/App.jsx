@@ -7,7 +7,10 @@ function App() {
   const [quantityInput, setQuantityInput] = React.useState("");
 
   const handleAdd = (event, searchInput, quantityInput) => {
-    setShoppingList([...shoppingList, {itemName: searchInput, itemQuantity: quantityInput}]);
+    // Prevent duplicate items from being added to shoppingList since itemName is used as the key and needs to be unique
+    if (!shoppingList.some((listItem) => listItem.itemName.toLowerCase() === searchInput.toLowerCase())) {
+      setShoppingList([...shoppingList, {itemName: searchInput, itemQuantity: quantityInput}]);
+    }
     event.preventDefault();
   }
 
@@ -41,7 +44,7 @@ const SearchBar = ({searchInput, quantityInput, onSearchInput, onQuantityInput, 
 const ShoppingList = ({shoppingList}) => (
   <ul className="shoppingList">
     {shoppingList.map((listItem) => (
-      <ListItem itemName={listItem.itemName} itemQuantity={listItem.itemQuantity}/>  
+      <ListItem key={listItem.itemName} itemName={listItem.itemName} itemQuantity={listItem.itemQuantity}/>  
     ))}
   </ul>
 );
