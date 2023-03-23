@@ -6,7 +6,7 @@ function App() {
   const [searchInput, setSearchInput] = React.useState("");
   const [quantityInput, setQuantityInput] = React.useState("");
 
-  const handleAdd = (event, searchInput, quantityInput) => {
+  const handleAddItem = (event, searchInput, quantityInput) => {
     // Prevent duplicate items from being added to shoppingList since itemName is used as the key and needs to be unique
     if (!shoppingList.some((listItem) => listItem.itemName.toLowerCase() === searchInput.toLowerCase())) {
       setShoppingList([...shoppingList, {itemName: searchInput, itemQuantity: quantityInput}]);
@@ -22,11 +22,17 @@ function App() {
     setQuantityInput(event.target.value);
   }
 
+  const handleRemoveItem = (itemName) => {
+    setShoppingList(shoppingList.filter((listItem) => (
+      listItem.itemName != itemName
+    )))
+  }
+
   return (
     <>
       <h1 className="title">Shopping List</h1>
-      <SearchBar searchInput={searchInput} quantityInput={quantityInput} onSearchInput={handleSearchInput} onQuantityInput={handleQuantityInput} onAddItem={handleAdd}/>
-      <ShoppingList shoppingList={shoppingList}/>   
+      <SearchBar searchInput={searchInput} quantityInput={quantityInput} onSearchInput={handleSearchInput} onQuantityInput={handleQuantityInput} onAddItem={handleAddItem}/>
+      <ShoppingList shoppingList={shoppingList} handleRemoveItem={handleRemoveItem}/>   
     </>
   )
 };
@@ -41,20 +47,24 @@ const SearchBar = ({searchInput, quantityInput, onSearchInput, onQuantityInput, 
   </form>
 );
 
-const ShoppingList = ({shoppingList}) => (
+const ShoppingList = ({shoppingList, handleRemoveItem}) => (
   <ul className="shoppingList">
     {shoppingList.map((listItem) => (
-      <ListItem key={listItem.itemName} itemName={listItem.itemName} itemQuantity={listItem.itemQuantity}/>  
+      <ListItem key={listItem.itemName} itemName={listItem.itemName} itemQuantity={listItem.itemQuantity} onRemoveItem={handleRemoveItem}/>  
     ))}
   </ul>
 );
 
-const ListItem = ({itemName, itemQuantity}) => (
+const ListItem = ({itemName, itemQuantity, onRemoveItem}) => (
   <li className="listItem">
     <p className="itemName">{itemName}</p>
     <p className="itemQuantity">{itemQuantity}</p>
     <button className="editButton">Edit</button>
-    <button className="removeButton">X</button>
+    <button className="removeButton" onClick={() => 
+      onRemoveItem(itemName)}
+    >
+      X
+    </button>
   </li>
 );
 
